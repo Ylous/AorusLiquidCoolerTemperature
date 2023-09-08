@@ -1,3 +1,5 @@
+import logging
+
 import psutil
 import usb.core
 import usb.util
@@ -17,12 +19,12 @@ class LiquidCooler:
         if not device:
             raise Exception("Device not found!")
         else:
-            print(f"Found device. Bus: {device.bus} | Address: {device.address}")
+            logging.info(f"Found device. Bus: {device.bus} | Address: {device.address}")
 
         if device.is_kernel_driver_active(default_interface):
             device.detach_kernel_device(default_interface)
             usb.util.claim_interface(device, default_interface)
-            print(f"Claimed interface: {default_interface}.")
+            logging.info(f"Claimed interface: {default_interface}.")
 
         self.dev = device
 
@@ -31,4 +33,4 @@ class LiquidCooler:
         data_fragment = convert_temperature_to_bytes_array(cpu_temp)
 
         response = self.dev.ctrl_transfer(0x21, 0x09, 0x0300, 1, bytes.fromhex(data_fragment))
-        print(f"Data sent. Temperature: {cpu_temp} Hex: {data_fragment} Response: {response}")
+        logging.info(f"Data sent. Temperature: {cpu_temp} Hex: {data_fragment} Response: {response}")
