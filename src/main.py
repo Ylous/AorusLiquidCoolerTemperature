@@ -2,7 +2,7 @@ import psutil
 import usb.core
 import usb.util
 
-from utils import convert_temperature_to_bytes_array
+from src.utils import convert_temperature_to_bytes_array
 
 product_id = 0x7a46
 vendor_id = 0x1044
