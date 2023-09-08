@@ -8,7 +8,14 @@ from packets import create_temperature_set_payload
 
 
 class LiquidCooler:
-    def __init__(self, product_id: int = 0x7A46, vendor_id: int = 0x1044, default_interface: int = 1):
+    def __init__(self, vendor_id: int = 0x1044, product_id: int = 0x7A46, default_interface: int = 1):
+        """
+        Creates a liquid cooler device instance by given PID, VID
+        Args:
+            vendor_id: USB HID VID
+            product_id: USB HID PID
+            default_interface: Interface for kernel device API
+        """
         device = usb.core.find(idVendor=vendor_id,
                                idProduct=product_id)
 
@@ -24,7 +31,15 @@ class LiquidCooler:
 
         self.dev = device
 
-    def send_cpu_temperature(self, temperature: int = None):
+    def send_cpu_temperature(self, temperature: int = None) -> None:
+        """
+        Send temperature to device
+        Args:
+            temperature: Temperature to send, by default 1st CPU temperature sensor (Optional)
+
+        Returns: None
+
+        """
         cpu_temp = temperature or int(psutil.sensors_temperatures()['coretemp'][0].current)
         payload = create_temperature_set_payload(cpu_temp)
 
