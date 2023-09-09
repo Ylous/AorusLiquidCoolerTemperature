@@ -1,10 +1,36 @@
 # Aorus Liquid Cooler Temperature
 
-This software is for people like me who have a Gigabyte water cooling system installed in the wrong place. The program
-is very simple, it just sends the CPU temperature to the water block.
+This software is for people like me who have a AORUS Liquid Cooler series water coolant system on Linux hardware. The program
+is very simple, it just sends the CPU temperature to the water block by USB interface.
 
-Maybe in the future I will do a synchronization of the processor name or something else.
+### Getting started
 
-> #### Additional Information:
+```python
+import time
+import logging
+
+from aorus_liquid_cooler import LiquidCooler
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        format='%(asctime)s %(message)s',
+        datefmt='%m.%d.%Y %H:%M:%S',
+        level=logging.DEBUG,
+    )
+
+    liquid_cooler = LiquidCooler()
+
+    while True:
+        liquid_cooler.send_cpu_temperature()
+        time.sleep(2)
+
+```
+
+
+### TODO
+- [X] Temperature synchronization.
+- [ ] Processor name and other stuff synchronization.
+
+> #### Notes:
 > Tested on Aorus Liquid Cooler 240. \
-> This program works only on Linux!
+> This snippet works only on Linux!
