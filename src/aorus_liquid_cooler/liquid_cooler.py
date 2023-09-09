@@ -25,7 +25,7 @@ class LiquidCooler:
             logging.debug(f"found device. Bus: {device.bus} | Address: {device.address}")
 
         if device.is_kernel_driver_active(default_interface):
-            device.detach_kernel_device(default_interface)
+            device.detach_kernel_driver(default_interface)
             usb.util.claim_interface(device, default_interface)
             logging.debug(f"claimed interface: {default_interface}.")
 
