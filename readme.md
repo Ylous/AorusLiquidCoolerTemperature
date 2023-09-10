@@ -19,6 +19,8 @@ if __name__ == "__main__":
     )
 
     liquid_cooler = LiquidCooler()
+    
+    liquid_cooler.set_cooling_mode(1, "max")  # 1 - Fans, 2 - Pump
 
     while True:
         liquid_cooler.send_cpu_temperature()
@@ -26,9 +28,30 @@ if __name__ == "__main__":
 
 ```
 
+### Systemctl
+For your convenience, I have provided a configuration file for creating the service.
+```ini
+[Unit]
+Description=aorus
+After=network.target
+
+[Service]
+Type=simple
+User=root
+
+WorkingDirectory=/home/ylous/AorusLiquidCoolerTemperature
+ExecStart=sudo python3 main.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=network.target 
+```
+
 
 ### TODO
 - [X] Temperature synchronization.
+- [X] Setting the pump or fans.
 - [ ] Processor name and other stuff synchronization.
 
 > #### Notes:

@@ -4,7 +4,7 @@ import psutil
 import usb.core
 import usb.util
 
-from packets import create_temperature_set_payload
+from .packets import create_temperature_set_payload, create_cooling_mode_payload
 
 
 class LiquidCooler:
@@ -27,7 +27,7 @@ class LiquidCooler:
         if device.is_kernel_driver_active(default_interface):
             device.detach_kernel_driver(default_interface)
             usb.util.claim_interface(device, default_interface)
-            logging.debug(f"claimed interface: {default_interface}.")
+            logging.debug(f"claimed interface: {default_interface}")
 
         self.dev = device
 
@@ -45,3 +45,18 @@ class LiquidCooler:
 
         response = self.dev.ctrl_transfer(0x21, 0x09, 0x0300, 1, payload)
         logging.debug(f"Temperature: {cpu_temp} Response: {response}")
+
+    def set_cooling_mode(self, cooling_type: int = 1, cooling_mode: str = "max") -> None:
+        """
+        Set cooling mode for pump or fans
+        Args:
+            cooling_type: Available types: 1 - Fans, 2 - Pump
+            cooling_mode: Available modes: Zero, Balance, Performance, Quiet, Max, Default, Custom
+
+        Returns: None
+
+        """
+        payload = create_cooling_mode_payload(cooling_type, cooling_mode)
+
+        response = self.dev.ctrl_transfer(0x21, 0x09, 0x0300, 1, payload)
+        logging.debug(f"Type: {cooling_type} Mode: {cooling_mode} Response: {response}")

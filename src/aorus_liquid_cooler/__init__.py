@@ -1,1 +1,1 @@
-from liquid_cooler import LiquidCooler
+from .liquid_cooler import LiquidCooler
