@@ -9,7 +9,7 @@ is very simple, it just sends the CPU temperature to the water block by USB inte
 import time
 import logging
 
-from aorus_liquid_cooler import LiquidCooler
+from aorus_liquid_cooler import LiquidCooler, CoolingType, CoolingMode
 
 if __name__ == "__main__":
     logging.basicConfig(
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     liquid_cooler = LiquidCooler()
     
-    liquid_cooler.set_cooling_mode(1, "max")  # 1 - Fans, 2 - Pump
+    liquid_cooler.set_cooling_mode(CoolingType.FANS, CoolingMode.MAX)
 
     while True:
         liquid_cooler.send_cpu_temperature()
