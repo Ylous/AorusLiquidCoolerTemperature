@@ -4,6 +4,7 @@ import psutil
 import usb.core
 import usb.util
 
+from .enums import CoolingType, CoolingMode
 from .packets import create_temperature_set_payload, create_cooling_mode_payload
 
 
@@ -43,20 +44,24 @@ class LiquidCooler:
         cpu_temp = temperature or int(psutil.sensors_temperatures()['coretemp'][0].current)
         payload = create_temperature_set_payload(cpu_temp)
 
-        response = self.dev.ctrl_transfer(0x21, 0x09, 0x0300, 1, payload)
+        response = self.__send_payload(payload)
         logging.debug(f"Temperature: {cpu_temp} Response: {response}")
 
-    def set_cooling_mode(self, cooling_type: int = 1, cooling_mode: str = "max") -> None:
+    def set_cooling_mode(self, cooling_type: CoolingType = CoolingType.FANS,
+                         cooling_mode: CoolingMode = CoolingMode.MAX) -> None:
         """
         Set cooling mode for pump or fans
         Args:
-            cooling_type: Available types: 1 - Fans, 2 - Pump
-            cooling_mode: Available modes: Zero, Balance, Performance, Quiet, Max, Default, Custom
+            cooling_type: Available types: Fans, Pump (Optional)
+            cooling_mode: Available modes: Zero, Balance, Performance, Quiet, Max, Default, Custom (Optional)
 
         Returns: None
 
         """
         payload = create_cooling_mode_payload(cooling_type, cooling_mode)
 
-        response = self.dev.ctrl_transfer(0x21, 0x09, 0x0300, 1, payload)
+        response = self.__send_payload(payload)
         logging.debug(f"Type: {cooling_type} Mode: {cooling_mode} Response: {response}")
+
+    def __send_payload(self, payload: bytes):
+        return self.dev.ctrl_transfer(0x21, 0x09, 0x0300, 1, payload)
