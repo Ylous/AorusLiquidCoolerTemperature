@@ -1,12 +1,12 @@
 from enum import Enum
 
 
-class CoolingType(Enum):
+class CoolingType(int, Enum):
     FANS = 1
     PUMP = 2
 
 
-class CoolingMode(Enum):
+class CoolingMode(int, Enum):
     ZERO = 7
     BALANCE = 0
     PERFORMANCE = 5
