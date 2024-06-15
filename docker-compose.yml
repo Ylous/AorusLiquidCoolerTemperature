@@ -1,0 +1,7 @@
+services:
+  control:
+    build: ./
+    devices:
+      - /dev/:/dev/
+    restart: unless-stopped
+
